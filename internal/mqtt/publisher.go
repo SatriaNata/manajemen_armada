@@ -12,9 +12,13 @@ import (
 
 func StartPublisher() {
 	opts := mqtt.NewClientOptions()
+	broker := os.Getenv("MQTT_BROKER_URL")
 	log.Printf("URL MQTT: %s", os.Getenv("MQTT_BROKER_URL"))
-	opts.AddBroker(os.Getenv("MQTT_BROKER_URL"))
-	opts.SetClientID("simulator-fleet-subscriber")
+	if broker == "" {
+		broker = "tcp://localhost:1883"
+	}
+	opts.AddBroker(broker)
+	opts.SetClientID("simulator-fleet-publisher")
 
 	client := mqtt.NewClient(opts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {

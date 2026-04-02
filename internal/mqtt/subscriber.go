@@ -8,7 +8,7 @@ import (
 	"fleet-management/internal/geofence"
 	"fleet-management/internal/rabbitmq"
 	"fleet-management/internal/service"
-
+	"time"
 )
 
 type VehicleLocation struct {
@@ -22,11 +22,38 @@ func StartSubscriber() {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(os.Getenv("MQTT_BROKER_URL"))
 	opts.SetClientID("fleet-subscriber")
+	opts.SetAutoReconnect(true)
+	opts.SetConnectRetry(true)
+	opts.SetConnectRetryInterval(5 * time.Second)
 
-	client := mqtt.NewClient(opts)
-	if token := client.Connect(); token.Wait() && token.Error() != nil {
-		log.Fatal(token.Error())
+	// client := mqtt.NewClient(opts)
+	// if token := client.Connect(); token.Wait() && token.Error() != nil {
+	// 	log.Fatal(token.Error())
+	// }
+
+	var client mqtt.Client
+	var err error
+
+	for i := 0; i < 10; i++ {
+		client = mqtt.NewClient(opts)
+
+		token := client.Connect()
+		if token.Wait() && token.Error() == nil {
+			log.Println("✅ Connected to MQTT broker")
+			break
+		}
+
+		err = token.Error()
+		log.Printf("MQTT not ready (%v), retrying... (%d/10)", err, i+1)
+
+		time.Sleep(3 * time.Second)
 	}
+
+	if err != nil {
+		log.Fatalf("❌ Failed to connect MQTT: %v", err)
+	}
+
+
 
 	log.Println("Connected to MQTT broker")
 
