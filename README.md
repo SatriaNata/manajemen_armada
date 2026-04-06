@@ -37,6 +37,12 @@ docker compose up --build
 sistem akan berjalan di
 API -> http://localhost:8080
 Check sistem berjalan http://localhost:8080/test
+Check data in database you need to connect first ->
+- DB_HOST=postgres
+- DB_PORT=5432
+- DB_USER=postgres
+- DB_PASSWORD=localpassword
+- DB_NAME=fleet_management
 RabbitMQ dashboard -> http:/localhost:15672 
 - username: guest
 - password: guest
