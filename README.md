@@ -42,8 +42,7 @@ RabbitMQ dashboard -> http:/localhost:15672
 - password: guest
 
 ## **Run MQTT vehicle publisher**
- Run for send vehicle simulation cordinate every 2 seconds
- Open new terminal for run this command promt
+ Run for send vehicle simulation cordinate every 2 seconds, to run this simulation you need to open new terminal for run this command promt
 ```bash
     go run cmd/publisher/main.go
 ```
