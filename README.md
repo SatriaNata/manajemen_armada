@@ -43,6 +43,7 @@ Check data in database you need to connect first ->
 - DB_USER=postgres
 - DB_PASSWORD=localpassword
 - DB_NAME=fleet_management
+
 RabbitMQ dashboard -> http:/localhost:15672 
 - username: guest
 - password: guest
